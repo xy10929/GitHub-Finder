@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import { createContext, useReducer } from 'react'
+import githubReducer from './GithubReducer'
 
 const GithubContext = createContext()
 //2.create context, which will be exported as interface
@@ -10,8 +11,12 @@ export const GithubProvider = ({ children }) => {
   //the fuction should be exported, and
   //return GithubContext.GithubProvider component that wraps the argument of the function
 
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
+  const initialState = {
+    users: [],
+    loading: true,
+  }
+
+  const [state, dispatch] = useReducer(githubReducer, initialState)
 
   const fetchUsers = async () => {
     const response = await fetch(`${GITHUB_URL}/users`, {
@@ -23,15 +28,17 @@ export const GithubProvider = ({ children }) => {
     const data = await response.json()
 
     //3.fetch the data, and set as state--users
-    setUsers(data)
-    setLoading(false)
+    dispatch({
+      type: 'GET_USERS',
+      payload: data,
+    })
   }
 
   return (
     <GithubContext.Provider
       value={{
-        users,
-        loading,
+        users: state.users,
+        loading: state.loading,
         fetchUsers,
       }}
       //the value props of the component describes states & functions that malipulate states(also defined in the export function)
