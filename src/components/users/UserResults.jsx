@@ -9,9 +9,8 @@ function UserResults() {
   useEffect(() => {
     fetchUsers()
   }, [])
-  //1.useEffect: when loading this component, call fetchUsers func passed by GithubContext, which also brings data & loading state
+  //1.useEffect: when loading this component, call fetchUsers function passed by GithubContext, which also brings data & loading state
 
-  //5.return (based on data & loading state)
   if (!loading) {
     return (
       <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>
