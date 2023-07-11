@@ -8,9 +8,13 @@ const githubReducer = (state, action) => {
         users: action.payload,
         loading: false,
       }
-    //5.githubReducer func change state
-    //user -> payload(from dispatch func), which is fetched data
-    //loading -> false
+    //users -> payload(from dispatch func), which is fetched data
+    //10.githubReducer func changes state, replacing state-users with fatched data, and set loading false
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: true,
+      }
     default:
       return state
   }

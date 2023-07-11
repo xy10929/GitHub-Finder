@@ -9,6 +9,7 @@ import { GithubProvider } from './context/github/GithubContext'
 
 function App() {
   return (
+    //0. use GithubProvider to rander all
     <GithubProvider>
       <Router>
         <div className='flex flex-col justify-between h-screen'>
