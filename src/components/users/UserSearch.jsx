@@ -3,14 +3,11 @@ import GithubContext from '../../context/github/GithubContext'
 
 function UserSearch() {
   const [text, setText] = useState('')
-  //3.set text as ''
+  //3.set text as '', hooked by setText
   const handleChange = (e) => setText(e.target.value)
   //5.get input from search bar
 
-  const { users, searchUsers } = useContext(GithubContext)
-
-  //text: search bar(value prop of input element in form) -> onChange()、useState() -> state(text) -> searchUsers()、fetch() ->
-  //sesult: dispatch() -> action.payload -> githubReducer() -> users
+  const { users, searchUsers, clearUsers } = useContext(GithubContext)
 
   const handleSubmmit = (e) => {
     e.preventDefault()
@@ -52,7 +49,9 @@ function UserSearch() {
       {users.length > 0 && (
         <div>
           {/* clear button */}
-          <button className='btn btn-ghost btn-lg'>Clear</button>
+          <button className='btn btn-ghost btn-lg' onClick={clearUsers}>
+            Clear
+          </button>
         </div>
       )}
     </div>

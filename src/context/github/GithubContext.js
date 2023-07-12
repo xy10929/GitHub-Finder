@@ -48,6 +48,8 @@ export const GithubProvider = ({ children }) => {
 
   const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
+  const clearUsers = () => dispatch({ type: 'CLEAR_USERS' })
+
   //2.rander the parameter(whole page) as state-initialState & searchUsers func(for changing state)
   return (
     <GithubContext.Provider
@@ -55,6 +57,7 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         loading: state.loading,
         searchUsers,
+        clearUsers,
       }}
       //the value props of the component describes states & functions that malipulate states(also defined in the export function)
       //11.the updated state(users & loading) is passed by GithubContext for rerandering
