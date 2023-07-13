@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react'
 import GithubContext from '../../context/github/GithubContext'
+import AlertContext from '../../context/alert/AlertContext'
 
 function UserSearch() {
   const [text, setText] = useState('')
@@ -8,11 +9,13 @@ function UserSearch() {
   //5.get input from search bar
 
   const { users, searchUsers, clearUsers } = useContext(GithubContext)
+  const { setAlert } = useContext(AlertContext)
 
   const handleSubmmit = (e) => {
     e.preventDefault()
     if (text === '') {
-      alert('Please enter something')
+      setAlert('Please enter something', 'error')
+      //state changes for 3s
     } else {
       searchUsers(text)
       //6.call for fetaching data based on user input

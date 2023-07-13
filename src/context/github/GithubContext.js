@@ -11,8 +11,11 @@ export const GithubProvider = ({ children }) => {
 
   const initialState = {
     users: [],
+    user: {},
     loading: false,
   }
+  //user - username
+  //users - all data loaded
 
   //1. state is intialized as initialState
   const [state, dispatch] = useReducer(githubReducer, initialState)
@@ -22,6 +25,7 @@ export const GithubProvider = ({ children }) => {
   //initialState -> input in the form -> useState('')、onChange、useState() -> state(text) -> onSubmit -> searchUsers()、fetch() -> fetched data -> dispatch(action) -> githubReducer() -> state which comes up with fetched data -> components rerander
   //*******************************************************
 
+  //get results by searching
   const searchUsers = async (text) => {
     setLoading()
 
@@ -31,6 +35,7 @@ export const GithubProvider = ({ children }) => {
 
     //7. fetch data from API based on input-text
     const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
+      //interact with API
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`,
         //set token inside the app
@@ -46,6 +51,30 @@ export const GithubProvider = ({ children }) => {
     })
   }
 
+  //get single user
+  const getUser = async (login) => {
+    setLoading()
+
+    //interact with API
+    const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        //set token inside the app
+      },
+    })
+
+    if (response.status === 404) {
+      window.location = '/notfound'
+    } else {
+      //set single user 's data as state = {...}
+      const data = await response.json()
+      dispatch({
+        type: 'GET_USER',
+        payload: data,
+      })
+    }
+  }
+
   const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
   const clearUsers = () => dispatch({ type: 'CLEAR_USERS' })
@@ -56,8 +85,10 @@ export const GithubProvider = ({ children }) => {
       value={{
         users: state.users,
         loading: state.loading,
+        user: state.user,
         searchUsers,
         clearUsers,
+        getUser,
       }}
       //the value props of the component describes states & functions that malipulate states(also defined in the export function)
       //11.the updated state(users & loading) is passed by GithubContext for rerandering
