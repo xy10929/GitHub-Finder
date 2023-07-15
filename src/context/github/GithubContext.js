@@ -13,8 +13,9 @@ export const GithubProvider = ({ children }) => {
     users: [],
     user: {},
     loading: false,
+    repos: [],
   }
-  //user - username
+  //user - one user' s data
   //users - all data loaded
 
   //1. state is intialized as initialState
@@ -42,6 +43,8 @@ export const GithubProvider = ({ children }) => {
       },
     })
     const { items } = await response.json()
+    //.json(): (when resolved) turn response to a object
+    //get items property value(array of users' data from searching)
 
     //8.dispatch func triggers proccesses of updating state and rerandering
     // data included in action object is sent to githubReducer func
@@ -66,13 +69,38 @@ export const GithubProvider = ({ children }) => {
     if (response.status === 404) {
       window.location = '/notfound'
     } else {
-      //set single user 's data as state = {...}
+      //set state as one user 's data
       const data = await response.json()
       dispatch({
         type: 'GET_USER',
         payload: data,
       })
     }
+  }
+
+  const getUserRepos = async (login) => {
+    setLoading()
+
+    const params = new URLSearchParams({
+      sort: 'created',
+      per_page: 10,
+    })
+
+    const response = await fetch(
+      `${GITHUB_URL}/users/${login}/repos?${params}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+        },
+      }
+    )
+    const data = await response.json()
+
+    dispatch({
+      type: 'GET_REPOS',
+      payload: data,
+    })
+    //payload set as data (object array of one user 's repos)
   }
 
   const setLoading = () => dispatch({ type: 'SET_LOADING' })
@@ -86,9 +114,11 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         loading: state.loading,
         user: state.user,
+        repos: state.repos,
         searchUsers,
         clearUsers,
         getUser,
+        getUserRepos,
       }}
       //the value props of the component describes states & functions that malipulate states(also defined in the export function)
       //11.the updated state(users & loading) is passed by GithubContext for rerandering

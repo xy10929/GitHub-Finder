@@ -26,6 +26,14 @@ const githubReducer = (state, action) => {
         user: action.payload,
         loading: false,
       }
+    //call getUser to set one user 's data as state-user
+    case 'GET_REPOS':
+      return {
+        ...state,
+        repos: action.payload,
+        loading: false,
+      }
+    //call getUserRepos to set one user 's repos as state-repos
     default:
       return state
   }
