@@ -2,9 +2,9 @@ import spinner from './assets/spinner.gif'
 
 function Spinner() {
   return (
-    <div className='w-100 mt-20'>
+    <div className='mt-20'>
       <img
-        with={180}
+        width={180}
         className='text-center mx-auto'
         src={spinner}
         alt='Loading...'
